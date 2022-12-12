@@ -29,4 +29,5 @@ git clone https://github.com/josejuansanchez/iaw-practica-lamp.git
 sed -i "s/lamp_db/$DB_NAME/" /tmp/iaw-practica-lamp/db/database.sql
 
 # Importamos la base de datos
+
 mysql -u root < /tmp/iaw-practica-lamp/db/database.sql
