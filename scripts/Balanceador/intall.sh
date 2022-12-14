@@ -22,6 +22,7 @@ rm -f /var/www/html/index.html
 ##############Modulos para proxy inverso y balanceo de carga#################
 
 a2enmod proxy proxy_http proxy_balancer headers ssl proxy_ajp lbmethod_bybusyness rewrite deflate
+a2enmod lbmethod_byrequests
 
 #Cipiamso el archivo de configuración de apache
 
@@ -29,8 +30,8 @@ cp ../../conf/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Reemplazamos las variables del archivo de configuración
 
-sed -i "s/IP_HTTP_SERVER_1/$IP_HTTP_SERVER_1" /etc/apache2/sites-available/000-default.conf
-sed -i "s/IP_HTTP_SERVER_2/$IP_HTTP_SERVER_2" /etc/apache2/sites-available/000-default.conf
+sed -i "s/IP_HTTP_SERVER_1/$IP_HTTP_SERVER_1/" /etc/apache2/sites-available/000-default.conf
+sed -i "s/IP_HTTP_SERVER_2/$IP_HTTP_SERVER_2/" /etc/apache2/sites-available/000-default.conf
 
 #Reiniciamos el servidor
 
