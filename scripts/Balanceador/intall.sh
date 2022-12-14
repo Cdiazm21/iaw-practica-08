@@ -32,7 +32,7 @@ a2enmod proxy proxy_http proxy_balancer headers ssl proxy_ajp lbmethod_bybusynes
 
 #Cipiamso el archivo de configuración de apache
 
-cp ../conf/000-default.conf /etc/apache2/sites-available/000-default.conf
+cp ../../conf/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Reemplazamos las variables del archivo de configuración
 

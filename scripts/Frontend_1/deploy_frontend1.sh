@@ -22,7 +22,7 @@ mv /tmp/iaw-practica-lamp/src/* /var/www/html
 chown www-data:www-data /var/www/html -R
 
 # Borramos el archivo index.html
-rm /var/www/html/index.html
+rm -rf /var/www/html/index.html
 
 # Configuramos las variables
 sed -i "s/localhost/$DB_HOST_PRIVATE_IP/" /var/www/html/config.php
