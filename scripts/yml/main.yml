@@ -5,4 +5,4 @@
   - import_playbook: install_frontend_2.yml
   - import_playbook: deploy_frontend_1.yml
   - import_playbook: deploy_frontend_2.yml
-  - import_playbook: balanceador.yml
+  - import_playbook: install_balanceador.yml

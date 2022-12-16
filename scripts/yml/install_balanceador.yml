@@ -55,11 +55,11 @@
   - name: Clonamos el repositorio
     git:
       repo: https://github.com/Cdiazm21/iaw-practica-08.git
-      dest: /tmp/archivos
+      dest: /tmp/
 
   - name: Movemos los archivos de configuración a /etc/apache2/sites-availeble
     copy:
-      src: /tmp/archivos/conf/000-default.conf
+      src: /tmp/conf/000-default.conf
       dest: /etc/apache2/sites-available/
       remote_src: yes
 
@@ -77,24 +77,23 @@
 
   - name: Eliminamos los archivos clonados innecesarios.
     file:
-      path: /tmp/archivos
+      path: /tmp/
 
   - name: Reinicamos apache2
     service: 
       name: apache2
       state: restarted
 
-#################Instalacion de certbot########################
+################# Instalacion de certbot ########################
 
   - name: Añadimos las variables
     ansible.builtin.include_vars:
       ./variables.yml
 
-  - name: Instalación de cerbot mediante snap
-    community.general.snap:
+  - name: Install Certbot
+    snap:
       name: certbot
-      classic: true
-      state: present
+      channel: stable
 
   - name: Descarga el certificado 
     ansible.builtin.command: certbot --apache -m {{EMAIL}}  --agree-tos --no-eff-email -d {{DOMAIN}}
