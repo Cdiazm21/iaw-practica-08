@@ -1,0 +1,107 @@
+---
+- name: Playbook para instalar la pila frontend
+  hosts: balanceador
+  become: yes
+
+  tasks:
+
+  - name: Añadimos las variables
+    ansible.builtin.include_vars:
+      ./variables.yml
+
+  - name: Actualizar los repositorios
+    apt:
+      update_cache: yes
+
+  - name: Instalar el servidor web Apache
+    apt:
+      name: apache2
+      state: present
+
+  - name: Instalar PHP 
+    apt:
+      name: "{{php_paquetes}}"
+      state: present
+
+  - name: Reiniciamos el servidor apache
+    service:
+      name: apache2
+      state: restarted 
+
+######## Instalamos los modulos ##############
+  - name: Instalamos los modulos del proxy inverso 
+    apache2_module:
+     name: "{{ item }}"
+     state: present
+    with_items:
+     - lbmethod_byrequests
+     - proxy_html
+     - proxy_connect
+     - proxy_balancer
+     - headers
+     - deflate
+     - rewrite
+     - proxy_ajp
+     - proxy_http
+     - proxy
+
+     ############ configuracion archivos conf#############
+
+  - name: Eliminamos los archivos clonados innecesarios.
+    file:
+      path: /etc/apache2/sites-available/000-default.conf
+
+
+  - name: Clonamos el repositorio
+    git:
+      repo: https://github.com/Cdiazm21/iaw-practica-08.git
+      dest: /tmp/archivos
+
+  - name: Movemos los archivos de configuración a /etc/apache2/sites-availeble
+    copy:
+      src: /tmp/archivos/conf/000-default.conf
+      dest: /etc/apache2/sites-available/
+      remote_src: yes
+
+  - name: Cambiamos el contenido del archivo 000-default.conf
+    ansible.builtin.replace:
+      path: /etc/apache2/sites-available/000-default.conf
+      regexp: IP_HTTP_SERVER_1
+      replace: "{{IP_HTTP_SERVER_1}}"
+
+  - name: Cambiamos el contenido del archivo 000-default.conf
+    ansible.builtin.replace:
+      path: /etc/apache2/sites-available/000-default.conf
+      regexp: IP_HTTP_SERVER_2
+      replace: "{{IP_HTTP_SERVER_2}}"
+
+  - name: Eliminamos los archivos clonados innecesarios.
+    file:
+      path: /tmp/archivos
+
+  - name: Reinicamos apache2
+    service: 
+      name: apache2
+      state: restarted
+
+#################Instalacion de certbot########################
+
+  - name: Añadimos las variables
+    ansible.builtin.include_vars:
+      ./variables.yml
+
+  - name: Instalación de cerbot mediante snap
+    community.general.snap:
+      name: certbot
+      classic: true
+      state: present
+
+  - name: Descarga el certificado 
+    ansible.builtin.command: certbot --apache -m {{EMAIL}}  --agree-tos --no-eff-email -d {{DOMAIN}}
+    register: my_output
+    changed_when: my_output.rc !=0
+
+  - name: Reinicamos apache2
+    service: 
+      name: apache2
+      state: restarted
