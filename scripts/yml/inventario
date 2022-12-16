@@ -1,0 +1,16 @@
+[backend]
+54.161.171.231
+
+[frontend_1]
+44.213.33.79
+
+[frontend_2]
+44.213.33.79
+
+[balanceador]
+44.213.33.79
+
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=/home/cdiaz/vockey.pem
+ansible_ssh_common_args='-o stricthostkeychecking=accept-new'
