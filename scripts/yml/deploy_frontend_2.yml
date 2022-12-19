@@ -17,17 +17,17 @@
   - name: Clonamos el repositorio
     git:
       repo: https://github.com/josejuansanchez/iaw-practica-lamp.git
-      dest: /tmp/archivos
+      dest: /tmp/clonacion
 
   - name: Movemos el código fuente de la aplicación
     copy:
-      src: /tmp/archivos/src/
+      src: /tmp/clonacion/src/
       dest: /var/www/html/
       remote_src: yes
 
   - name: Eliminamos el directorio de instalaciones previas
     file:
-      path: /tmp/archivos/
+      path: /tmp/clonacion/
       state: absent
 
   - name: Configuramos las variables de conexión gbd
